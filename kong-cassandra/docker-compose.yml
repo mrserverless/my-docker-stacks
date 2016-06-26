@@ -1,0 +1,8 @@
+# version '2'
+
+# docker run -d \
+
+#     -v /path/to/your/etc/cassandra/:/etc/cassandra \
+#     -p 9042:9042 \
+#     --name cassandra \
+#     mashape/cassandra

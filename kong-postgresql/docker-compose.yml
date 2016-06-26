@@ -1,0 +1,39 @@
+version: '2'
+services:
+  postgresql:
+    build: .
+    restart: always
+    # environment:
+      # POSTGRES_PASSWORD: 
+    ports:
+      - "5432:5432"
+    volumes_from:
+      - postgresql_data
+  postgresql_data:
+    image: busybox:latest
+    volumes:
+      - /var/lib/postgresql/data
+  kong:
+    image: littlebaydigital/kong:0.8.3
+    restart: always
+    depends_on:
+      - postgresql
+    links:
+      - postgresql
+    environment:
+      DATABASE: postgres
+      POSTGRES_HOST: postgresql
+      POSTGRES_PASSWORD: kong
+    ports:
+      - "8000:8000"
+      - "8443:8443"
+      - "8001:8001"
+      - "7946:7946"
+      - "7946:7946/udp"
+  kong-dashboard:
+    image: pgbi/kong-dashboard:latest
+    restart: always
+    depends_on:
+      - kong
+    ports:
+      - "8090:8080"

@@ -1,0 +1,15 @@
+version: '2'
+services:
+  postgresql:
+    image: postgres:9.5
+    restart: always
+    # environment:
+      # POSTGRES_PASSWORD: 
+    ports:
+      - "5432:5432"
+    volumes_from:
+      - postgresql_data:rw
+  postgresql_data:
+    image: busybox:latest
+    volumes:
+      - /var/lib/postgresql/data
