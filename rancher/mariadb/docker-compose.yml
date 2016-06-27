@@ -1,29 +1,29 @@
 version: '2'
 services:
-  mysql:
-    image: mysql:5.7
+  mariadb:
+    image: k0st/alpine-mariadb:latest
     restart: always
     environment:
       MYSQL_DATABASE: cattle 
       MYSQL_USER: cattle
       MYSQL_PASSWORD: cattle
-    #   MYSQL_ROOT_PASSWORD: 
+      # MYSQL_ROOT_PASSWORD: 
     ports:
-      - "3036:3036"
+      - "3306:3306"
     volumes_from:
-      - mysql_data
-  mysql_data:
+      - data
+  data:
     image: busybox:latest
     volumes:
-      - /var/lib/data/mysql:/var/lib/mysql
+      - /var/lib/data/mariadb:/var/lib/mysql
   rancher-server:
     image: rancher/server:v1.1.0-dev5
     restart: always
     depends_on:
-      - mysql
+      - mariadb
     links:
-      - mysql
+      - mariadb
     environment:
-      CATTLE_DB_CATTLE_MYSQL_HOST: mysql
+      CATTLE_DB_CATTLE_MYSQL_HOST: mariadb
     ports:
       - "8080:8080"

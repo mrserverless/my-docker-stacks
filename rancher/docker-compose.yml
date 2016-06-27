@@ -1,0 +1,9 @@
+version: '2'
+services:
+  rancher-server:
+    image: rancher/server:v1.1.0-dev5
+    restart: always
+    volumes:
+      - /var/lib/data/mysql:/var/lib/mysql
+    ports:
+      - "8080:8080"

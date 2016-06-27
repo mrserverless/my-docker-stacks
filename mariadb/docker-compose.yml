@@ -1,0 +1,15 @@
+version: '2'
+services:
+  mysql:
+    image: k0st/alpine-mariadb:latest
+    restart: always
+    environment:
+      # MYSQL_ROOT_PASSWORD: 
+    ports:
+      - "3306:3306"
+    volumes_from:
+      - data
+  data:
+    image: busybox:latest
+    volumes:
+      - /var/lib/data/mariadb:/var/lib/mysql
