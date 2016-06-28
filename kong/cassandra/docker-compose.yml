@@ -1,29 +1,26 @@
 version: '2'
 services:
-  postgresql:
-    build: .
+  cassandra:
+    image: cassandra:2.2
     restart: always
-    # environment:
-      # POSTGRES_PASSWORD: 
     ports:
-      - "5432:5432"
+      - "9042:9042"
     volumes_from:
-      - postgresql_data
-  postgresql_data:
+      - cassandra_data
+  cassandra_data:
     image: busybox:latest
     volumes:
-      - /var/lib/postgresql/data
+      - /var/lib/cassandra
   kong:
     image: littlebaydigital/kong:0.8.3
     restart: always
     depends_on:
-      - postgresql
+      - cassandra
     links:
-      - postgresql
+      - cassandra
     environment:
-      DATABASE: postgres
-      POSTGRES_HOST: postgresql
-      POSTGRES_PASSWORD: kong
+      DATABASE: cassandra
+      CASSANDRA_CONTACT_POINTS: '\"cassandra:9042\"'
     ports:
       - "8000:8000"
       - "8443:8443"
@@ -36,4 +33,4 @@ services:
     depends_on:
       - kong
     ports:
-      - "8090:8080"
+      - "9090:8080"
